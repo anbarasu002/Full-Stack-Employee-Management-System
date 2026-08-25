@@ -100,7 +100,7 @@ Whether you're an HR administrator tracking headcount across departments or a de
 | **Data Storage** | In-memory (easily swappable for MySQL/PostgreSQL/MongoDB) |
 | **Build Tools** | Maven (backend), npm (frontend) |
 | **Linting** | ESLint |
-| **Hosting** | Vercel (frontend) |
+| **Hosting** | Vercel (frontend) · Render (backend) |
 
 ---
 
@@ -111,7 +111,7 @@ Whether you're an HR administrator tracking headcount across departments or a de
 │                      │  ───────────────────────────────────▶ │                      │
 │   React (Vite) SPA   │                                        │   Spring Boot API    │
 │  Frontend (Vercel)   │  ◀─────────────────────────────────── │  (Employee & Auth)   │
-│                      │           Axios + Bearer Token          │                      │
+│                      │           Axios + Bearer Token          │   Backend (Render)   │
 └─────────────────────┘                                        └──────────┬───────────┘
                                                                             │
                                                                             ▼
@@ -276,7 +276,14 @@ By default, the frontend points to the backend at `http://localhost:8080/api`, c
 export const API_BASE_URL = 'http://localhost:8080/api'
 ```
 
-If you deploy the backend elsewhere (e.g., Render, Railway, an EC2 instance), update `API_BASE_URL` accordingly — or refactor it to read from a Vite environment variable (`import.meta.env.VITE_API_BASE_URL`) for environment-specific builds.
+For production, point this at your deployed Render backend instead:
+
+```js
+// src/services/api.js
+export const API_BASE_URL = 'https://your-render-service.onrender.com/api'
+```
+
+It's recommended to refactor this into a Vite environment variable (`import.meta.env.VITE_API_BASE_URL`) so local and production builds can use different values without touching source code — set `VITE_API_BASE_URL` in a `.env` file locally and in your Vercel project settings for production.
 
 The backend's server port and Jackson date formatting are configured in:
 
@@ -288,11 +295,13 @@ spring.jackson.date-format=yyyy-MM-dd
 spring.jackson.serialization.write-dates-as-timestamps=false
 ```
 
+Render sets the `PORT` environment variable automatically at runtime — Spring Boot picks this up as long as `server.port` isn't hardcoded to conflict with it, or you can bind explicitly with `server.port=${PORT:8080}`.
+
 ---
 
 ## 📡 API Reference
 
-Base URL: `http://localhost:8080/api`
+Base URL: `http://localhost:8080/api` (local) or your Render service URL in production, e.g. `https://your-render-service.onrender.com/api`
 
 ### Authentication — `/auth`
 
@@ -384,15 +393,27 @@ Handles account credentials for authentication, with passwords processed via `Pa
 ## ☁️ Deployment
 
 - **Frontend:** Deployed on [Vercel](https://vercel.com) → [Live Demo](https://employee-management-system-eight-gules.vercel.app/)
-- **Backend:** Can be deployed to any Java-friendly host such as Render, Railway, Fly.io, AWS Elastic Beanstalk, or a Docker container. Build a production JAR with:
+- **Backend:** Deployed on [Render](https://render.com) as a web service running the Spring Boot JAR.
 
-```bash
-cd "Employee Management System Backend"
-./mvnw clean package
-java -jar target/Backend.jar
-```
+### Deploying the backend to Render
 
-- Remember to update the frontend's `API_BASE_URL` (or environment variable) to point to your deployed backend URL, and configure `CorsConfig.java` to allow your deployed frontend origin.
+1. Push the backend to GitHub (already done — this repo).
+2. Create a new **Web Service** on Render and point it at this repository, with the root directory set to `Full-Stack Employee Management System/Employee Management System Backend`.
+3. Set the build and start commands:
+
+   ```bash
+   # Build command
+   ./mvnw clean package -DskipTests
+
+   # Start command
+   java -jar target/Backend.jar
+   ```
+
+4. Render assigns a public URL such as `https://your-service-name.onrender.com` — copy it.
+5. Update `CorsConfig.java` on the backend to allow your deployed frontend's origin (e.g. `https://employee-management-system-eight-gules.vercel.app`).
+6. Update the frontend's `API_BASE_URL` (or `VITE_API_BASE_URL` environment variable in Vercel) to point to the Render URL from step 4, then redeploy the frontend.
+
+> **Note:** Render's free tier spins down idle services — the first request after inactivity may take a few extra seconds while the backend cold-starts.
 
 ---
 
@@ -412,7 +433,8 @@ java -jar target/Backend.jar
 
 | Issue | Likely Cause | Fix |
 |-------|--------------|-----|
-| Frontend shows "Unable to connect to the server" | Backend isn't running or is on a different port | Start the Spring Boot backend and confirm it's on port `8080` |
+| Frontend shows "Unable to connect to the server" | Backend isn't running, or `API_BASE_URL` doesn't match the Render URL | Start the Spring Boot backend locally, or confirm the frontend is pointing at the correct Render URL |
+| Live demo feels slow on first load | Render free-tier services spin down when idle | Wait a few seconds for the cold start to finish, then retry |
 | CORS errors in the browser console | Frontend origin not allowed by backend | Update `CorsConfig.java` to include your frontend's URL |
 | `401 Unauthorized` after login | Token not attached or expired | Check `localStorage` for the `orbithr_token` key; log in again |
 | `mvnw: Permission denied` (macOS/Linux) | Wrapper script isn't executable | Run `chmod +x mvnw` |
@@ -445,6 +467,7 @@ This project is available for learning, portfolio, and personal use. Feel free t
 - [React](https://react.dev/) & [Vite](https://vitejs.dev/) for a fast frontend development experience
 - [Spring Boot](https://spring.io/projects/spring-boot) for a productive, convention-driven backend framework
 - [Vercel](https://vercel.com/) for effortless frontend hosting
+- [Render](https://render.com/) for effortless backend hosting
 
 ---
 
