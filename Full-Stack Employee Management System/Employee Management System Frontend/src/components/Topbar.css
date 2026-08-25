@@ -1,0 +1,87 @@
+.topbar {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 32px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar__menu {
+  display: none;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-700);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.topbar__title {
+  font-size: 16.5px;
+  font-weight: 600;
+}
+
+.topbar__sub {
+  font-size: 12px;
+  color: var(--ink-500);
+  margin-top: 2px;
+}
+
+.topbar__spacer {
+  flex: 1;
+}
+
+.topbar__profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--indigo-100);
+  color: var(--indigo-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.topbar__profile-text {
+  line-height: 1.3;
+}
+
+.topbar__profile-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.topbar__profile-role {
+  font-size: 11px;
+  color: var(--ink-500);
+}
+
+@media (max-width: 960px) {
+  .topbar {
+    padding: 0 16px;
+  }
+  .topbar__menu {
+    display: flex;
+  }
+  .topbar__profile-text {
+    display: none;
+  }
+}

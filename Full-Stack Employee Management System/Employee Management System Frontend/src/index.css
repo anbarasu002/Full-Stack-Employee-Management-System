@@ -1,0 +1,142 @@
+:root {
+  --ink-950: #12142b;
+  --ink-900: #171b3b;
+  --ink-700: #363b63;
+  --ink-500: #666c98;
+  --ink-300: #a4a8c9;
+  --ink-100: #e4e6f5;
+
+  --bg-canvas: #f3f4fb;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #f8f9fe;
+  --bg-sidebar: #141630;
+
+  --indigo-700: #2a35b8;
+  --indigo-600: #3644e0;
+  --indigo-500: #5865f2;
+  --indigo-100: #e7e9fd;
+  --indigo-50: #f2f3ff;
+
+  --teal-600: #0e9f8b;
+  --teal-100: #d9f5ef;
+
+  --amber-600: #d97706;
+  --amber-100: #fef1d6;
+
+  --coral-600: #e5484d;
+  --coral-100: #fde3e4;
+
+  --border-subtle: #e4e6f2;
+  --border-strong: #c9cce4;
+
+  --shadow-sm: 0 1px 2px rgba(23, 27, 59, 0.06);
+  --shadow-md: 0 6px 20px rgba(23, 27, 59, 0.08);
+  --shadow-lg: 0 20px 45px rgba(23, 27, 59, 0.14);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --sidebar-width: 248px;
+  --topbar-height: 68px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-canvas);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+  font-size: 14.5px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--ink-950);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--indigo-600);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--indigo-100);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ink-100);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
