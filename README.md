@@ -450,8 +450,6 @@ This project is available for learning, portfolio, and personal use. Feel free t
 
 <div align="center">
 
-Made with ❤️ by [anbarasu002](https://github.com/anbarasu002)
-
 **[⬆ Back to top](#-employee-management-system)**
 
 </div>
